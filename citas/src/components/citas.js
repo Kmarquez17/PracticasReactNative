@@ -4,7 +4,7 @@ import {StyleSheet, Text, View, TouchableHighlight} from 'react-native';
 const citas = ({cita, handleEliminar}) => {
   const dialgoElminar = id => {
     handleEliminar(id);
-    console.log(`ELiminando... id -> ${id}`);
+   
   };
   return (
     <View style={styles.cita}>
