@@ -5,7 +5,7 @@ import {
   View,
   FlatList,
   TouchableHighlight,
-  TouchableNativeFeedback,
+  TouchableWithoutFeedback,
   Keyboard,
   Platform,
 } from 'react-native';
@@ -56,7 +56,7 @@ const App = () => {
   };
 
   return (
-    <TouchableNativeFeedback
+    <TouchableWithoutFeedback
       onPress={() => {
         cerraTeclado();
       }}>
@@ -98,7 +98,7 @@ const App = () => {
           )}
         </View>
       </View>
-    </TouchableNativeFeedback>
+    </TouchableWithoutFeedback>
   );
 };
 
