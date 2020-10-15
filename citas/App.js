@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,37 +9,43 @@ import {
   Keyboard,
   Platform,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+
 import Citas from './src/components/citas';
 import Formulario from './src/components/Formulario';
 const App = () => {
   // Definir el state de citas
-  const [citas, setCitas] = useState([
-    {
-      id: '1',
-      paciente: 'Hooks',
-      propetario: 'Kevin Marquez',
-      sintomas: 'No come',
-    },
-    {
-      id: '2',
-      paciente: 'Kaiser',
-      propetario: 'Juan Lopez',
-      sintomas: 'Dolor en la pata izquierda',
-    },
-    {
-      id: '3',
-      paciente: 'Rochi',
-      propetario: 'Dolores Garcia',
-      sintomas: 'Sangrado de nariz',
-    },
-  ]);
+  const [citas, setCitas] = useState([]);
+
+  useEffect(() => {
+    const handleObtenerCitas = async () => {
+      try {
+        const citasStorage = await AsyncStorage.getItem('citas');
+        if (citasStorage) {
+          setCitas(JSON.parse(citasStorage));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    handleObtenerCitas();
+  }, []);
   const [mostrarFrom, setMostarFrom] = useState(false);
+
+  //Almacenar las citas al Storage
+  const handleAlmacenarCitas = async citasJSON => {
+    await AsyncStorage.setItem('citas', citasJSON);
+    try {
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //Eliminar la cita de un paciente dado de Alta
   const handleEliminar = id => {
-    setCitas(citasActuales => {
-      return citasActuales.filter(cita => cita.id !== id);
-    });
+    const citasFiltradas = citas.filter(cita => cita.id !== id);
+    setCitas(citasFiltradas);
+    handleAlmacenarCitas(JSON.stringify(citasFiltradas));
   };
 
   //Agregamos nuevas citas al state
@@ -48,6 +54,8 @@ const App = () => {
     setCitas(citasNueva);
     //Ocultar el formulario
     setMostarFrom(false);
+    //Pasar citas al Storage
+    handleAlmacenarCitas(JSON.stringify(citasNueva));
   };
 
   //Ocultar el teclago
@@ -77,7 +85,7 @@ const App = () => {
           {mostrarFrom ? (
             <>
               <Text style={styles.titulo}>Crear Nueva Cita</Text>
-              <Formulario agregarCita={agregarCita} />
+              <Formulario agregarCita={agregarCita} handleAlmacenarCitas />
             </>
           ) : (
             <>
