@@ -16,10 +16,32 @@ const App = () => {
     <>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName='Inicio'
-        >
-          <Stack.Screen name="Inicio" component={Inicio} />
-          <Stack.Screen name="Nosotros" component={Nosotros} />
+          initialRouteName="Inicio"
+          screenOptions={{
+            title: 'Componente principal',
+            headerTitleAlign: 'center',
+            headerStyle: {
+              backgroundColor: '#F4511E',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}>
+          <Stack.Screen
+            name="Inicio"
+            component={Inicio}
+            options={{
+              title: 'Componente principal',
+            }}
+          />
+          <Stack.Screen
+            name="Nosotros"
+            component={Nosotros}
+            options={({route}) => ({
+              title: route.params.clienteId,
+            })}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </>
